@@ -18,4 +18,4 @@ upload: firmware
 	avrdude -P /dev/ttyACM0 -c arduino -b 19200 -p m328p -b 115200 -U flash:w:firmware.hex:i
 
 clean:
-	rm -f $(OBJS) firmware
+	rm -f $(OBJS) firmware firmware.hex
