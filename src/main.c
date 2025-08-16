@@ -15,11 +15,11 @@ uint8_t*** current_layout = (uint8_t***)normal_table;
 
 uint8_t* report_buffer;
 
-uint8_t* keys_buffer_hist[3];
+uint8_t* keys_buffer_hist;
 uint8_t keys_buffer_size;
 uint8_t keys_buffer_pos;
 
-uint16_t* unic_buffer_hist[2];
+uint16_t* unic_buffer_hist;
 uint8_t unic_buffer_size;
 uint8_t unic_buffer_pos;
 
@@ -47,12 +47,12 @@ void init(){
 }
 
 void update_keys_buffer_normal(int code){
-	*keys_buffer_hist[keys_buffer_pos%keys_buffer_size] = (uint8_t)code;
+	keys_buffer_hist[keys_buffer_pos%keys_buffer_size] = (uint8_t)code;
 	keys_buffer_pos = (keys_buffer_pos + 1) % keys_buffer_size;
 }
 
 void update_keys_buffer_unicode(int code){
-	*unic_buffer_hist[unic_buffer_pos%unic_buffer_size] = (uint16_t)code;
+	unic_buffer_hist[unic_buffer_pos%unic_buffer_size] = (uint16_t)code;
 	unic_buffer_pos = (unic_buffer_pos + 1) % unic_buffer_size;
 }
 
