@@ -1,5 +1,5 @@
 *.o
 *.elf
 *.hex
-src/fimware
+src/firmware
 vusb-20121206/
