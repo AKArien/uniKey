@@ -31,14 +31,13 @@ const PROGMEM char normal_table[8][8] = {
     {RALT, RMTA, RCTL, RSFT, 0x00, 0x00, 0x00, 0x00}
 };
 
-const PROGMEM uint16_t erglacon_table[8][8] = {
+const uint16_t erglacon_table[8][8] = {
     {Uescape, U1, U2, U3, U4, U5, U6, U7},
-    {U8, U9, U0, OPBR, KEYI, KEYO, KEYP, CLBR},
-    {KTAB, KEYA, KEYZ, KEYE, KEYR, KEYT, KEYY, KEYU},
-    {LSFT, KEYQ, KEYS, KEYD, KEYF, KEYG, KEYH, KEYJ},
-    {KEYK, KEYL, KEYM, ENTR, COMA, POIN, BKSL, SCOL},
-    {LALT, KEYW, KEYX, KEYC, KEYV, KEYB, KEYN, COMA},
-    {CAPS, LMTA, LCTL, SPCE, 0x00, BKSP, SPCE, 0x00},
-    {RALT, RMTA, RCTL, RSFT, 0x00, 0x00, 0x00, 0x00}
+    {U8, U9, U0, OPBR, Ui, Uo, Up, CLBR},
+    {KTAB, Ua, Uz, Ue, Ur, Ut, Uy, Uu},
+    {LSFT, Uq, Us, Ud, Uf, Ug, Uh, Uj},
+    {Uk, Ul, Um, ENTR, COMA, POIN, BKSL, SCOL},
+    {LALT, Uw, Ux, Uc, Uv, Ub, Un, COMA},
+    {CAPS, LMTA, LCTL, Uspace, 0x0000, Ubackspace, Uspace, 0x0000},
+    {RALT, RMTA, RCTL, RSFT, 0x0000, 0x0000, 0x0000, 0x0000}
 };
-
