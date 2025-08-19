@@ -52,8 +52,11 @@
 #define UZ 0x005A
 
 #define Uspace 0x0020
+#define Unbrsp 0x00A0
 #define Ubackspace 0x0008
 #define Uescape 0x001B
+#define Utab 0x0009
+#define Ureturn 0x000D
 
 #define U0 0x0030
 #define U1 0x0031
@@ -65,3 +68,9 @@
 #define U7 0x0037
 #define U8 0x0038
 #define U9 0x0039
+
+#define Ucomma 0x002C
+#define Upoint 0x002E
+#define Uhyphen 0x002D
+#define Ulqt 0x00AB
+#define Urqt 0x00BB

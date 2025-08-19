@@ -49,7 +49,6 @@
 #define APST 0x34
 
 #define COMA 0x36
-
 #define POIN 0x37
 #define BKSL 0x38
 #define CAPS 0x39
@@ -62,4 +61,3 @@
 #define RSFT 0xE5
 #define RALT 0xE6
 #define RMTA 0xE7
-
