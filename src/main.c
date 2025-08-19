@@ -11,23 +11,19 @@
 #include "descriptors.h"
 #include "keys/layouts.h"
 
-uint8_t*** current_layout = (uint8_t***)normal_table;
-
 uint8_t* report_buffer;
 
-uint8_t* keys_buffer_hist;
-uint8_t keys_buffer_size;
+#define KEYS_BUFFER_SIZE 3
+uint8_t keys_buffer_hist[KEYS_BUFFER_SIZE];
 uint8_t keys_buffer_pos;
 
-uint16_t* unic_buffer_hist;
-uint8_t unic_buffer_size;
+#define UNIC_BUFFER_SIZE 2
+uint16_t unic_buffer_hist[UNIC_BUFFER_SIZE];
 uint8_t unic_buffer_pos;
 
 uint8_t* mods_buffer_hist;
 uint8_t mods_buffer_size;
 uint8_t mods_buffer_pos;
-
-
 
 int idle_rate = 500;
 
@@ -40,23 +36,33 @@ enum modes {
 void init(){
 	// vusb is on 2 and 4 of D, since it needs an interrupt (D2, aka int0)
 
-	// B0-7 and C0-7 are connected to the key matrix (8*8 > 61, which is how many keys i shuold use if i counted correctly. The p  
+	// B0-7 and C0-7 are connected to the key matrix (8*8 > 61, which is how many keys i shuold use if i counted correctly. The p
 	DDRC = 0xFF; // write
 	PORTC = 0x00;
 	DDRB = 0x00; // read
 }
 
 void update_keys_buffer_normal(int code){
-	keys_buffer_hist[keys_buffer_pos%keys_buffer_size] = (uint8_t)code;
-	keys_buffer_pos = (keys_buffer_pos + 1) % keys_buffer_size;
+	keys_buffer_hist[keys_buffer_pos%KEYS_BUFFER_SIZE] = (uint8_t)code;
+	keys_buffer_pos = (keys_buffer_pos + 1) % KEYS_BUFFER_SIZE;
 }
 
 void update_keys_buffer_unicode(int code){
-	unic_buffer_hist[unic_buffer_pos%unic_buffer_size] = (uint16_t)code;
-	unic_buffer_pos = (unic_buffer_pos + 1) % unic_buffer_size;
+	unic_buffer_hist[unic_buffer_pos%UNIC_BUFFER_SIZE] = (uint16_t)code;
+	unic_buffer_pos = (unic_buffer_pos + 1) % UNIC_BUFFER_SIZE;
 }
 
 void (*update_keys_buffer_current)(int);
+
+int norm_get_key_at(int i, int a){
+	return (int)normal_table[i][a];
+}
+
+int unic_get_key_at(int i, int a){
+	return (int)erglacon_table[i][a];
+}
+
+int (*current_get_key_at)(int, int);
 
 void updateReportBuffer(){
 	// Read matrix
@@ -64,11 +70,12 @@ void updateReportBuffer(){
 		PORTC = 0x01 << i;
 		for (int a = 0 ; a < 8 ; a++){
 			if ((PINB >> a) & 1){
-				int code = *current_layout[i][a];
+				int code = current_get_key_at(i, a);
 				switch (code){
-					case LCTL: case LSFT: case LALT: case LMTA: case RCTL: case RSFT: case RALT: case RMTA: 
+					case LCTL: case LSFT: case LALT: case LMTA: case RCTL: case RSFT: case RALT: case RMTA:
 						mods_buffer_hist[mods_buffer_pos%mods_buffer_size] = code;
 						mods_buffer_pos = (mods_buffer_pos + 1) % mods_buffer_size;
+						break;
 
 					default:
 						update_keys_buffer_current(code);
@@ -81,7 +88,6 @@ void updateReportBuffer(){
 
 void set_mode(enum modes mode){
 	if (keys_buffer_hist){
-		free(keys_buffer_hist);
 		free(mods_buffer_hist);
 	}
 	keys_buffer_pos = 0;
@@ -92,11 +98,13 @@ void set_mode(enum modes mode){
 		mods_buffer_hist = malloc(sizeof(uint8_t)*5);
 		mods_buffer_size = 5;
 		update_keys_buffer_current = &update_keys_buffer_normal;
+		current_get_key_at = &norm_get_key_at;
 	}
 	else {
 		mods_buffer_hist = malloc(sizeof(uint8_t)*4);
 		mods_buffer_size = 4;
 		update_keys_buffer_current = &update_keys_buffer_unicode;
+		current_get_key_at = &unic_get_key_at;
 	}
 }
 
@@ -105,7 +113,7 @@ usbMsgLen_t usbFunctionSetup(uint8_t data[8]){
 
     if((rq->bmRequestType & USBRQ_TYPE_MASK) == USBRQ_TYPE_MASK){
         switch(rq->bRequest){
-        
+
             case USBRQ_HID_GET_REPORT:
                 // Treat same as our interrupt IN (send keys)
                 usbMsgPtr = (unsigned short)report_buffer;
@@ -156,7 +164,7 @@ int main(){
             }
         }
 
-        // Interrupt IN request, and there is new data to report
+        // Some fucker wants to know what happened
         if(usbInterruptIsReady()){
             // Send over the HID data
             usbSetInterrupt(report_buffer, sizeof(report_buffer));
