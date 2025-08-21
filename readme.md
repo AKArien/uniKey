@@ -7,6 +7,7 @@ Very unhappy with the way keyboards are currently handled (i’ll write my manif
 # Hardware
 
 Runs on an arduino pro mini and a couple switches.
+The schema, pcb, and all that fun stuff is available in the kicad directory, while files for printing out the case and pieces are in the 3d directory.
 
 # Firmware
 
