@@ -32,14 +32,14 @@ enum modes {
 	erglacon
 };
 
-
 void init(){
-	// vusb is on 2 and 4 of D, since it needs an interrupt (D2, aka int0)
+	// vusb is on 3 and 4 of D, since it needs an interrupt (D2, aka int0)
 
+	// this part is outdated
 	// B0-7 and C0-7 are connected to the key matrix (8*8 > 61, which is how many keys i shuold use if i counted correctly. The p
-	DDRC = 0xFF; // write
-	PORTC = 0x00;
-	DDRB = 0x00; // read
+	// DDRC = 0xFF; // write
+	// PORTC = 0x00;
+	// DDRB = 0x00; // read
 }
 
 void update_keys_buffer_normal(int code){
@@ -66,10 +66,10 @@ int (*current_get_key_at)(int, int);
 
 void updateReportBuffer(){
 	// Read matrix
-	for (int i = 0 ; i < 8 ; i++){
-		PORTC = 0x01 << i;
-		for (int a = 0 ; a < 8 ; a++){
-			if ((PINB >> a) & 1){
+	for (int i = 0 ; i < WRITE_PINS_COUNT ; i++){
+		write_pins[i].pin_reg = /* 0x01 nope, not this ! we need to add and substract, because there may be other stuff on other pins */ << write_pins[i].bit;
+		for (int i = 0 ; i < READ_PINS_COUNT ; i++){
+			if ((*(read_pins[i].pin_reg) >> read_pins[i].bit) & 1){
 				int code = current_get_key_at(i, a);
 				switch (code){
 					case LCTL: case LSFT: case LALT: case LMTA: case RCTL: case RSFT: case RALT: case RMTA:
@@ -82,8 +82,9 @@ void updateReportBuffer(){
 				}
 			}
 		}
+		write_pins[i].pin_reg = /* 0x00 nope, not this ! we need to add and substract, because there may be other stuff on other pins */ << write_pins[i].bit;
 	}
-	PORTC = 0x00; // get reset loser
+  }
 }
 
 void set_mode(enum modes mode){

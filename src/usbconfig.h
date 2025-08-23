@@ -33,7 +33,7 @@ section at the end of this file).
 /* This is the bit number in USB_CFG_IOPORT where the USB D- line is connected.
  * This may be any bit in the port.
  */
-#define USB_CFG_DPLUS_BIT       2
+#define USB_CFG_DPLUS_BIT       3
 /* This is the bit number in USB_CFG_IOPORT where the USB D+ line is connected.
  * This may be any bit in the port. Please note that D+ must also be connected
  * to interrupt pin INT0! [You can also use other interrupts, see section
@@ -271,7 +271,7 @@ section at the end of this file).
 /* See USB specification if you want to conform to an existing device class.
  * Class 0xff is "vendor specific".
  */
-#define USB_CFG_INTERFACE_CLASS     0x03    /* HID Class */   
+#define USB_CFG_INTERFACE_CLASS     0x03    /* HID Class */
 #define USB_CFG_INTERFACE_SUBCLASS  0       /* We aren't implementing boot protocol here */
 #define USB_CFG_INTERFACE_PROTOCOL  1 // keyboard
 /* See USB specification if you want to conform to an existing device class or

@@ -1,3 +1,6 @@
+// keycodes for hid standard keyboard page (https://www.usb.org/sites/default/files/hut1_21.pdf)
+// you know the thing that sucks and that this repository is a statement against. Keys are named after their names there, though i do regret not filling out the codes directly for the principle
+
 #define KEY1 0x1E
 #define KEY2 0x1F
 #define KEY3 0x20
@@ -41,6 +44,9 @@
 #define BKSP 0x2A
 #define KTAB 0x2B
 #define SPCE 0x2C
+
+#define HPHN 0x2D
+#define EQUL 0x2E
 
 #define OPBR 0x2F
 #define CLBR 0x30
