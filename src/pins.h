@@ -32,11 +32,11 @@ struct pin_by_index read_pins[] = {
 #define WRITE_PINS_COUNT 5
 
 struct pin_by_index write_pins[] = {
-  { &PIND, 1 },
-  { &PIND, 2 },
-  { &PIND, 7 },
-  { &PIND, 5 },
-  { &PINC, 0 }
+  { &PORTD, 1 },
+  { &PORTD, 2 },
+  { &PORTD, 7 },
+  { &PORTD, 5 },
+  { &PORTC, 0 }
 };
 
 #endif

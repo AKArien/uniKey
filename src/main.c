@@ -36,13 +36,16 @@ enum modes {
 };
 
 void init(){
-	// vusb is on 3 and 4 of D, since it needs an interrupt (D2, aka int0)
+	// vusb is on 3 and 4 of D, since it needs an interrupt (D3, aka int1)
 
-	// this part is outdated
-	// B0-7 and C0-7 are connected to the key matrix (8*8 > 61, which is how many keys i shuold use if i counted correctly. The p
-	// DDRC = 0xFF; // write
-	// PORTC = 0x00;
-	// DDRB = 0x00; // read
+#ifdef MODEL_ALL_MAINBOARD
+
+	DDRB = 0x00;
+	DDRC = 0x02;
+	DDRD = 0xA6;
+
+#endif
+
 }
 
 void update_keys_buffer_normal(int code, int state){
