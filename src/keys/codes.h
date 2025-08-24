@@ -50,6 +50,7 @@
 
 #define OPBR 0x2F
 #define CLBR 0x30
+#define ATSL 0x31
 
 #define SCOL 0x33
 #define APST 0x34
@@ -67,3 +68,8 @@
 #define RSFT 0xE5
 #define RALT 0xE6
 #define RMTA 0xE7
+
+#define RARW 0x4F
+#define LARW 0x50
+#define DARW 0x51
+#define UARW 0x52

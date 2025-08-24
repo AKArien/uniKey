@@ -1,4 +1,4 @@
-const struct pin_by_index { // this fuckery is for iterating over a discontinued series of registers
+struct pin_by_index { // this fuckery is for iterating over a discontinued series of registers
   volatile uint8_t *pin_reg;
   uint8_t bit;
 };
@@ -37,7 +37,7 @@ struct pin_by_index write_pins[] = {
   { &PIND, 7 },
   { &PIND, 5 },
   { &PINC, 0 }
-}
+};
 
 #endif
 

@@ -8,8 +8,11 @@
 
 #include "usbdrv/usbdrv.h"
 
+#define MODEL_ALL_MAINBOARD
+
 #include "descriptors.h"
 #include "keys/layouts.h"
+#include "pins.h"
 
 uint8_t report_buffer[8]; // usb low speed, so up to 8 bytes
 
@@ -42,14 +45,14 @@ void init(){
 	// DDRB = 0x00; // read
 }
 
-void update_keys_buffer_normal(int code, bool state){
-	for (int i = 0, i < KEYS_BUFFER_SIZE ; i++){
+void update_keys_buffer_normal(int code, int state){
+	for (int i = 0 ; i < KEYS_BUFFER_SIZE ; i++){
 		if (keys_buffer_hist[i] == code){
 			if (state){
 				return; // don’t do anything if the key is already being reported
 			}
 			else{
-				keys_buffer_hist[i] == 0x00 // void the entry
+				keys_buffer_hist[i] == 0x00; // void the entry
 			}
 		}
 	}
@@ -59,24 +62,24 @@ void update_keys_buffer_normal(int code, bool state){
 	memcpy(report_buffer, keys_buffer_hist, KEYS_BUFFER_SIZE); // write the report
 }
 
-void update_keys_buffer_unicode(int code, bool state){
-	for (int i = 0, i < UNIC_BUFFER_SIZE ; i++){
+void update_keys_buffer_unicode(int code, int state){
+	for (int i = 0 ; i < UNIC_BUFFER_SIZE ; i++){
 		if (unic_buffer_hist[i] == code){
 			if (state){
 				return; // don’t do anything if the key is already being reported
 			}
 			else{
-				unic_buffer_hist[i] == 0x0000 // void the entry
+				unic_buffer_hist[i] == 0x0000; // void the entry
 			}
 		}
 	}
 	unic_buffer_hist[unic_buffer_pos%UNIC_BUFFER_SIZE] = (uint16_t)code;
 	unic_buffer_pos = (unic_buffer_pos + 1) % UNIC_BUFFER_SIZE;
 
-	memcpy(report_buffer, keys_buffer_hist, KEYS_BUFFER_SIZE); // write the report
+	memcpy(report_buffer, keys_buffer_hist, UNIC_BUFFER_SIZE); // write the report
 }
 
-void (*update_keys_buffer_current)(int);
+void (*update_keys_buffer_current)(int, int);
 
 int norm_get_key_at(int i, int a){
 	return (int)normal_table[i][a];
@@ -91,10 +94,10 @@ int (*current_get_key_at)(int, int);
 void update_report_buffer(){
 	// Read matrix
 	for (int i = 0 ; i < WRITE_PINS_COUNT ; i++){
-		write_pins[i].pin_reg = write_pins[i].pin_reg + 0x01 << write_pins[i].bit;
-		for (int i = 0 ; i < READ_PINS_COUNT ; i++){
+		write_pins[i].pin_reg = write_pins[i].pin_reg + (0x01 << write_pins[i].bit);
+		for (int a = 0 ; a < READ_PINS_COUNT ; a++){
 			int code = current_get_key_at(i, a);
-			bool state (*(read_pins[i].pin_reg) >> read_pins[i].bit) & 1);
+			int state = (*(read_pins[i].pin_reg) >> read_pins[i].bit) & 1;
 			switch (code){
 				case LCTL: case LSFT: case LALT: case LMTA: case RCTL: case RSFT: case RALT: case RMTA:
 					mods_buffer_hist[mods_buffer_pos%mods_buffer_size] = code;
@@ -106,7 +109,7 @@ void update_report_buffer(){
 				break;
 			}
 		}
-		write_pins[i].pin_reg = write_pins[i].pin_reg - 0x01 << write_pins[i].bit;
+		write_pins[i].pin_reg = write_pins[i].pin_reg - (0x01 << write_pins[i].bit);
 	}
 }
 
@@ -128,7 +131,7 @@ void set_mode(enum modes mode){
 	}
 	else {
 		// mods_buffer_hist = malloc(sizeof(uint8_t)*4);
-		mods_buffer_hist = &report_buffer + UNIC_BUFFER_SIZE;
+		mods_buffer_hist = report_buffer + UNIC_BUFFER_SIZE;
 		mods_buffer_size = 4;
 		update_keys_buffer_current = &update_keys_buffer_unicode;
 		current_get_key_at = &unic_get_key_at;
