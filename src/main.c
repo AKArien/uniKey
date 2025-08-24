@@ -55,6 +55,8 @@ void update_keys_buffer_normal(int code, bool state){
 	}
 	keys_buffer_hist[keys_buffer_pos%KEYS_BUFFER_SIZE] = (uint8_t)code;
 	keys_buffer_pos = (keys_buffer_pos + 1) % KEYS_BUFFER_SIZE;
+
+	memcpy(report_buffer, keys_buffer_hist, KEYS_BUFFER_SIZE); // write the report
 }
 
 void update_keys_buffer_unicode(int code, bool state){
@@ -70,6 +72,8 @@ void update_keys_buffer_unicode(int code, bool state){
 	}
 	unic_buffer_hist[unic_buffer_pos%UNIC_BUFFER_SIZE] = (uint16_t)code;
 	unic_buffer_pos = (unic_buffer_pos + 1) % UNIC_BUFFER_SIZE;
+
+	memcpy(report_buffer, keys_buffer_hist, KEYS_BUFFER_SIZE); // write the report
 }
 
 void (*update_keys_buffer_current)(int);
@@ -107,22 +111,24 @@ void update_report_buffer(){
 }
 
 void set_mode(enum modes mode){
-	if (keys_buffer_hist){
-		free(mods_buffer_hist);
-	}
+	// if (keys_buffer_hist){
+		// free(mods_buffer_hist);
+	// }
 	keys_buffer_pos = 0;
 	unic_buffer_pos = 0;
 	mods_buffer_pos = 0;
 
 	if (mode == normal){
-		mods_buffer_hist = malloc(sizeof(uint8_t)*5);
+		// mods_buffer_hist = malloc(sizeof(uint8_t)*5);
+		mods_buffer_hist = report_buffer + KEYS_BUFFER_SIZE;
 		mods_buffer_size = 5;
 		update_keys_buffer_current = &update_keys_buffer_normal;
 		current_get_key_at = &norm_get_key_at;
 
 	}
 	else {
-		mods_buffer_hist = malloc(sizeof(uint8_t)*4);
+		// mods_buffer_hist = malloc(sizeof(uint8_t)*4);
+		mods_buffer_hist = &report_buffer + UNIC_BUFFER_SIZE;
 		mods_buffer_size = 4;
 		update_keys_buffer_current = &update_keys_buffer_unicode;
 		current_get_key_at = &unic_get_key_at;
