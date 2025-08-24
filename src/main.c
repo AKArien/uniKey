@@ -87,7 +87,7 @@ int (*current_get_key_at)(int, int);
 void update_report_buffer(){
 	// Read matrix
 	for (int i = 0 ; i < WRITE_PINS_COUNT ; i++){
-		write_pins[i].pin_reg = /* 0x01 nope, not this ! we need to add and substract, because there may be other stuff on other pins */ << write_pins[i].bit;
+		write_pins[i].pin_reg = write_pins[i].pin_reg + 0x01 << write_pins[i].bit;
 		for (int i = 0 ; i < READ_PINS_COUNT ; i++){
 			int code = current_get_key_at(i, a);
 			bool state (*(read_pins[i].pin_reg) >> read_pins[i].bit) & 1);
@@ -102,7 +102,7 @@ void update_report_buffer(){
 				break;
 			}
 		}
-		write_pins[i].pin_reg = /* 0x00 nope, not this ! we need to add and substract, because there may be other stuff on other pins */ << write_pins[i].bit;
+		write_pins[i].pin_reg = write_pins[i].pin_reg - 0x01 << write_pins[i].bit;
 	}
 }
 
