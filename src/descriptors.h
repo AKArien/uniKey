@@ -37,7 +37,7 @@ const PROGMEM char usbHidReportDescriptor_normal[39] = {
 	0x15, 0x00, 	// Logical Min (0)
 	0x25, 0x01, 	// Logical Max (1)
 	0x75, 0x01, 	// Report Size (1)
-	0x95, 0x03, 	// Report Count ()
+	0x95, 0x03, 	// Report Count (3)
 	0x81, 0x02, 	// Input(Data, Var, Abs)
 
 	// modifiers
@@ -47,7 +47,7 @@ const PROGMEM char usbHidReportDescriptor_normal[39] = {
 	0x15, 0x00, 	// Logical Min (0)
 	0x25, 0x01, 	// Logical Max (1)
 	0x75, 0x01, 	// Report Size (1)
-	0x95, 0x05, 	// Report Count ()
+	0x95, 0x05, 	// Report Count (5)
 	0x81, 0x02, 	// Input(Data, Array, Abs)
 
 	0xC0        // End Collection
