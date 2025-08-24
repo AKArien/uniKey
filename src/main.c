@@ -11,7 +11,7 @@
 #include "descriptors.h"
 #include "keys/layouts.h"
 
-uint8_t* report_buffer;
+uint8_t report_buffer[8]; // usb low speed, so up to 8 bytes
 
 #define KEYS_BUFFER_SIZE 3
 uint8_t keys_buffer_hist[KEYS_BUFFER_SIZE];
@@ -42,12 +42,32 @@ void init(){
 	// DDRB = 0x00; // read
 }
 
-void update_keys_buffer_normal(int code){
+void update_keys_buffer_normal(int code, bool state){
+	for (int i = 0, i < KEYS_BUFFER_SIZE ; i++){
+		if (keys_buffer_hist[i] == code){
+			if (state){
+				return; // don’t do anything if the key is already being reported
+			}
+			else{
+				keys_buffer_hist[i] == 0x00 // void the entry
+			}
+		}
+	}
 	keys_buffer_hist[keys_buffer_pos%KEYS_BUFFER_SIZE] = (uint8_t)code;
 	keys_buffer_pos = (keys_buffer_pos + 1) % KEYS_BUFFER_SIZE;
 }
 
-void update_keys_buffer_unicode(int code){
+void update_keys_buffer_unicode(int code, bool state){
+	for (int i = 0, i < UNIC_BUFFER_SIZE ; i++){
+		if (unic_buffer_hist[i] == code){
+			if (state){
+				return; // don’t do anything if the key is already being reported
+			}
+			else{
+				unic_buffer_hist[i] == 0x0000 // void the entry
+			}
+		}
+	}
 	unic_buffer_hist[unic_buffer_pos%UNIC_BUFFER_SIZE] = (uint16_t)code;
 	unic_buffer_pos = (unic_buffer_pos + 1) % UNIC_BUFFER_SIZE;
 }
@@ -64,27 +84,26 @@ int unic_get_key_at(int i, int a){
 
 int (*current_get_key_at)(int, int);
 
-void updateReportBuffer(){
+void update_report_buffer(){
 	// Read matrix
 	for (int i = 0 ; i < WRITE_PINS_COUNT ; i++){
 		write_pins[i].pin_reg = /* 0x01 nope, not this ! we need to add and substract, because there may be other stuff on other pins */ << write_pins[i].bit;
 		for (int i = 0 ; i < READ_PINS_COUNT ; i++){
-			if ((*(read_pins[i].pin_reg) >> read_pins[i].bit) & 1){
-				int code = current_get_key_at(i, a);
-				switch (code){
-					case LCTL: case LSFT: case LALT: case LMTA: case RCTL: case RSFT: case RALT: case RMTA:
-						mods_buffer_hist[mods_buffer_pos%mods_buffer_size] = code;
-						mods_buffer_pos = (mods_buffer_pos + 1) % mods_buffer_size;
-						break;
+			int code = current_get_key_at(i, a);
+			bool state (*(read_pins[i].pin_reg) >> read_pins[i].bit) & 1);
+			switch (code){
+				case LCTL: case LSFT: case LALT: case LMTA: case RCTL: case RSFT: case RALT: case RMTA:
+					mods_buffer_hist[mods_buffer_pos%mods_buffer_size] = code;
+					mods_buffer_pos = (mods_buffer_pos + 1) % mods_buffer_size;
+				break;
 
-					default:
-						update_keys_buffer_current(code);
-				}
+				default:
+					update_keys_buffer_current(code, state);
+				break;
 			}
 		}
 		write_pins[i].pin_reg = /* 0x00 nope, not this ! we need to add and substract, because there may be other stuff on other pins */ << write_pins[i].bit;
 	}
-  }
 }
 
 void set_mode(enum modes mode){
@@ -100,6 +119,7 @@ void set_mode(enum modes mode){
 		mods_buffer_size = 5;
 		update_keys_buffer_current = &update_keys_buffer_normal;
 		current_get_key_at = &norm_get_key_at;
+
 	}
 	else {
 		mods_buffer_hist = malloc(sizeof(uint8_t)*4);
@@ -165,10 +185,12 @@ int main(){
             }
         }
 
+				update_report_buffer();
+
         // Some fucker wants to know what happened
         if(usbInterruptIsReady()){
             // Send over the HID data
-            usbSetInterrupt(report_buffer, sizeof(report_buffer));
+            usbSetInterrupt(report_buffer, sizeof(report_buffer)); // usb low speed, so up to 8 bytes
         }
     }
 
