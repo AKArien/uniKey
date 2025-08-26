@@ -52,7 +52,7 @@ const PROGMEM uint16_t erglacon_table[8][8] = {
 #ifdef MODEL_ALL_MAINBOARD
 
 const PROGMEM char normal_table[5][14] = {
-    {ESCP, KEY1, KEY2, KEY3, KEY4, KEY5, KEY6, KEY7, KEY8, KEY9, KEY0, HPHN, EQUL, BKSP},
+    {ESCP, KEY1, KEY2, KEY3, KEY4, KEY5, KEY6, KEY7, KEY8, KEY9, KEY0, HPHN, EQUL, FDEL},
     {KTAB, KEYQ, KEYW, KEYE, KEYR, KEYT, KEYY, KEYU, KEYI, KEYO, KEYP, OPBR, CLBR, 0x00},
     {CAPS, KEYQ, KEYS, KEYD, KEYF, KEYG, KEYH, KEYJ, KEYK, KEYL, SCOL, APST, ATSL, ENTR},
     {LSFT, KEYZ, KEYX, KEYC, KEYV, KEYB, KEYN, KEYM, COMA, POIN, BKSL, 0x64, UARW, RSFT}, // the 3rd to last value is probably wrong because, due to the, and excuse my language, fucking retarted way the document is written, there is no way to know what it is. As a creative liberty, i took « Keyboard Non-US \and | », which has two footnotes.

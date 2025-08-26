@@ -60,6 +60,8 @@
 #define BKSL 0x38
 #define CAPS 0x39
 
+#define FDEL 0x4C
+
 #define LCTL 0xE0
 #define LSFT 0xE1
 #define LALT 0xE2
