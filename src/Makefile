@@ -1,6 +1,6 @@
 ODIR=obj
 CC=avr-gcc
-CFLAGS=-DF_CPU=16000000 -mmcu=atmega328p -I. -Iusbdrv -O3
+CFLAGS=-DF_CPU=16000000 -mmcu=atmega328p -I. -Iusbdrv -O3 -D $(MODEL)
 
 OBJS=main.o usbdrv/usbdrv.o usbdrv/usbdrvasm.o usbdrv/oddebug.o
 
@@ -15,7 +15,7 @@ firmware: $(OBJS)
 	avr-objcopy -O ihex firmware firmware.hex
 
 upload: firmware
-	avrdude -P /dev/ttyACM0 -c arduino -b 19200 -p m328p -b 115200 -U flash:w:firmware.hex:i
+	avrdude -P /dev/ttyACM0 -c $(ISP) -p m328p -b 115200 -U flash:w:firmware.hex:i
 
 clean:
 	rm -f $(OBJS) firmware firmware.hex
