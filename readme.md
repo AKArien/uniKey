@@ -12,7 +12,8 @@ If you want a « classic » keyboard with another microncontroller, check out 
 
 # Hardware
 
-There is currently one physical keyboard in the project, though i do plan on making more. The names used are the ones needed for compilation of the firmware with them.
+There is currently one physical keyboard in the project, though i do plan on making more.
+The names used are the ones needed for compilation of the firmware with them. Check firmware section for more details.
 ALL_MAINBOARD :
 - Ortholinear, 266\*95mm
 - Split, 2\*2,5-wide bottom-row keys « spacebar », 2-tall rightmost key « enter/return »
@@ -28,7 +29,10 @@ ALL_MAINBOARD :
 
 # Firmware
 
-It uses the V-USB library and features switching between a classic keycodes keyboard and this project’s namesake, one that uses the Unicode HID page. This means it prints out the firmware-attriuted characters on any operating system that supports this page.
+The goal of the project is to make a keyboard that uses the Unicode HID page (0x10) for the host OS to use firmware-decided characters. In other words, a *really* plug and play keyboard.
+As mentionned in hardware section, this repository will likely eventually have more keyboards. For now, only one exists.
+Compilation of the firmware for the different models is scheduled to be handled with preprocessor flags passed to the makefile. So, to compile for the model ALL_MAINBOARD, you would use : ```make MODEL=ALL_MAINBOARD```
+The ALL_MAINBOARD design uses the V-USB library, as it doesn’t have a dedicated USB chip.
 
 # Thanks
 
