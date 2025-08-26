@@ -34,6 +34,8 @@ As mentionned in hardware section, this repository will likely eventually have m
 Compilation of the firmware for the different models is scheduled to be handled with preprocessor flags passed to the makefile. So, to compile for the model ALL_MAINBOARD, you would use : ```make MODEL=ALL_MAINBOARD```
 The ALL_MAINBOARD design uses the V-USB library, as it doesn’t have a dedicated USB chip.
 
+To upload, use ```make upload ISP=<your in-circuit serial programmer, as per avrdude>```
+
 # Thanks
 
 Obdev, for making V-USB
