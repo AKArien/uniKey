@@ -3,3 +3,4 @@
 *.hex
 src/firmware
 vusb-20121206/
+kicad/*/kicad-backups/
