@@ -1,16 +1,7 @@
 #include "codes.h"
 #include "unicode.h"
 
-#define TINIEST 0
-#define ALL_MAINBOARD 1
-#define ALL_CLASSIC 2
-#define EVERYTHING 3
-
-#ifndef MODEL
-  #error "MODEL is not defined"
-#endif
-
-#if MODEL == TINIEST
+#ifdef TINIEST
 
 const PROGMEM char normal_table[8][8] = { // remember. this is a us keyboard, the failure of hid
     {ESCP, KEY1, KEY2, KEY3, KEY4, KEY5, KEY6, KEY7},
@@ -36,7 +27,10 @@ const PROGMEM uint16_t erglacon_table[8][8] = {
     {RALT, RMTA, RCTL, RSFT, 0x0000, 0x0000, 0x0000, 0x0000}
 };
 
-#elif MODEL == ALL_MAINBOARD
+#endif
+
+
+#ifdef ALL_MAINBOARD
 
 const PROGMEM char normal_table[5][14] = {
     {ESCP, KEY1, KEY2, KEY3, KEY4, KEY5, KEY6, KEY7, KEY8, KEY9, KEY0, HPHN, EQUL, FDEL},
@@ -50,9 +44,14 @@ const PROGMEM uint16_t erglacon_table[5][14] = {
 
 };
 
-#elif MODEL == ALL_CLASSIC
+#endif
 
 
-#elif MODEL == EVERYTHING
+#ifdef ALL_CLASSIC
+
+#endif
+
+
+#ifdef EVERYTHING
 
 #endif

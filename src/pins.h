@@ -1,22 +1,15 @@
-#define TINIEST 0
-#define ALL_MAINBOARD 1
-#define ALL_CLASSIC 2
-#define EVERYTHING 3
-
-#ifndef MODEL
-  #error "MODEL is not defined"
-#endif
-
 struct pin_by_index { // this fuckery is for iterating over a discontinued series of registers
   volatile uint8_t *pin_reg;
   uint8_t bit;
 };
 
 
-#if MODEL == TINIEST
+#ifdef TINIEST
+
+#endif
 
 
-#elif MODEL == ALL_MAINBOARD
+#ifdef ALL_MAINBOARD
 
 #define READ_PINS_COUNT 14
 
@@ -47,9 +40,14 @@ const struct pin_by_index write_pins[] = {
   { &PORTC, 0 }
 };
 
-#elif MODEL == ALL_CLASSIC
+#endif
 
 
-#elif MODEL == EVERYTHING
+#ifdef ALL_CLASSIC
+
+#endif
+
+
+#ifdef EVERYTHING
 
 #endif
