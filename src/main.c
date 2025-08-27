@@ -53,7 +53,7 @@ void update_keys_buffer_normal(int code, int state){
 				return; // don’t do anything if the key is already being reported
 			}
 			else{
-				keys_buffer_hist[i] == 0x00; // void the entry
+				keys_buffer_hist[i] = 0x00; // void the entry
 			}
 		}
 	}
@@ -70,7 +70,7 @@ void update_keys_buffer_unicode(int code, int state){
 				return; // don’t do anything if the key is already being reported
 			}
 			else{
-				unic_buffer_hist[i] == 0x0000; // void the entry
+				unic_buffer_hist[i] = 0x0000; // void the entry
 			}
 		}
 	}
@@ -95,7 +95,7 @@ int (*current_get_key_at)(int, int);
 void update_report_buffer(){
 	// Read matrix
 	for (int i = 0 ; i < WRITE_PINS_COUNT ; i++){
-		write_pins[i].pin_reg = write_pins[i].pin_reg + (0x01 << write_pins[i].bit);
+		*write_pins[i].pin_reg = *write_pins[i].pin_reg + (0x01 << write_pins[i].bit);
 		for (int a = 0 ; a < READ_PINS_COUNT ; a++){
 			int code = current_get_key_at(i, a);
 			int state = (*(read_pins[i].pin_reg) >> read_pins[i].bit) & 1;
@@ -110,7 +110,7 @@ void update_report_buffer(){
 				break;
 			}
 		}
-		write_pins[i].pin_reg = write_pins[i].pin_reg - (0x01 << write_pins[i].bit);
+		*write_pins[i].pin_reg = *write_pins[i].pin_reg - (0x01 << write_pins[i].bit);
 	}
 }
 
@@ -168,6 +168,8 @@ usbMsgLen_t usbFunctionSetup(uint8_t data[8]){
 int main(){
 
 	init();
+
+	set_mode(normal);
 
 	// Watchdog, just in case
     wdt_enable(WDTO_1S);
