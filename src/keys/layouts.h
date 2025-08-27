@@ -1,6 +1,11 @@
 #include "codes.h"
 #include "unicode.h"
 
+#define TINIEST 0
+#define ALL_MAINBOARD 1
+#define ALL_CLASSIC 2
+#define EVERYTHING 3
+
 #ifndef MODEL
   #error "MODEL is not defined"
 #endif
