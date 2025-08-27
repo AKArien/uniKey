@@ -8,8 +8,6 @@
 
 #include "usbdrv/usbdrv.h"
 
-#define MODEL_ALL_MAINBOARD
-
 #include "descriptors.h"
 #include "keys/layouts.h"
 #include "pins.h"
