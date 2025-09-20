@@ -1,4 +1,11 @@
-struct pin_by_index { // this fuckery is for iterating over a discontinued series of registers
+/*
+  defines registers for reading and writing pins we do this to easily access
+  the pins we want,
+  especially handy for iterating over a discontinued series of registers
+  This itself is important to intelligently place pins and traces on the pcb.
+*/
+
+struct pin_by_index {
   volatile uint8_t *pin_reg;
   uint8_t bit;
 };

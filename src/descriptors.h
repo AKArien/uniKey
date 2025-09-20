@@ -4,7 +4,7 @@
 // device and configuration descritors are handled in usb config…
 // todo : verify i’m not talking out of my ass
 
-const PROGMEM char normal_descriptor_conf[] = {
+const PROGMEM uint8_t normal_descriptor_conf[] = {
 	0x00, 0x09, // bLength
 	0x00, 0x21, // bDescriptorType
 	0x00, 0x00, 0x01, 0x11, // bcdHID
@@ -14,8 +14,8 @@ const PROGMEM char normal_descriptor_conf[] = {
 	0x00, 0x00, 0x00, 0x4F // wDescriptorLength
 };
 
-// const PROGMEM char erglacon_descriptor_conf[] = {
-const char usbDescriptorHidReport[] = {
+// const PROGMEM uint8_t erglacon_descriptor_conf[] = {
+const PROGMEM uint8_t usbDescriptorHidReport[] = {
 	0x00, 0x09, // bLength
 	0x00, 0x21, // bDescriptorType
 	0x00, 0x00, 0x01, 0x11, // bcdHID
@@ -53,8 +53,8 @@ const PROGMEM char usbHidReportDescriptor_normal[39] = {
 	0xC0        // End Collection
 };
 
-// const PROGMEM char usbHidReportDescriptor_erglacon[41] = {
-const char usbDescriptorConfiguration[41] = {
+// const PROGMEM uint8_t usbHidReportDescriptor_erglacon[41] = {
+const PROGMEM uint8_t usbDescriptorConfiguration[41] = {
 	0x05, 0x01, // Usage Page (Generic Desktop Page)
 	0x09, 0x06, // Usage (Keyboard)
 	0xA1, 0x01, // Collection (Application)
