@@ -47,36 +47,40 @@ void init(){
 }
 
 void update_keys_buffer_normal(int code, int state){
-	for (int i = 0 ; i < KEYS_BUFFER_SIZE ; i++){
+	for (int i = 0 ; i < KEYS_BUFFER_SIZE ; i++){ // is the code already being reported ?
 		if (keys_buffer_hist[i] == code){
 			if (state){
-				return; // don’t do anything if the key is already being reported
+				return;
 			}
 			else{
-				keys_buffer_hist[i] = 0x00; // void the entry
+				keys_buffer_hist[i] = 0x00; // void the entry if needed
+				goto NORMAL_WRITE;
 			}
 		}
 	}
 	keys_buffer_hist[keys_buffer_pos%KEYS_BUFFER_SIZE] = (uint8_t)code;
 	keys_buffer_pos = (keys_buffer_pos + 1) % KEYS_BUFFER_SIZE;
 
+NORMAL_WRITE:
 	memcpy(report_buffer, keys_buffer_hist, KEYS_BUFFER_SIZE); // write the report
 }
 
 void update_keys_buffer_unicode(int code, int state){
-	for (int i = 0 ; i < UNIC_BUFFER_SIZE ; i++){
+	for (int i = 0 ; i < UNIC_BUFFER_SIZE ; i++){ // is the code already being reported ?
 		if (unic_buffer_hist[i] == code){
 			if (state){
-				return; // don’t do anything if the key is already being reported
+				return;
 			}
 			else{
-				unic_buffer_hist[i] = 0x0000; // void the entry
+				unic_buffer_hist[i] = 0x0000; // void the entry if needed
+				goto UNIC_WRITE;
 			}
 		}
 	}
 	unic_buffer_hist[unic_buffer_pos%UNIC_BUFFER_SIZE] = (uint16_t)code;
 	unic_buffer_pos = (unic_buffer_pos + 1) % UNIC_BUFFER_SIZE;
 
+UNIC_WRITE:
 	memcpy(report_buffer, keys_buffer_hist, UNIC_BUFFER_SIZE); // write the report
 }
 
