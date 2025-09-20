@@ -119,15 +119,11 @@ void update_report_buffer(){
 }
 
 void set_mode(enum modes mode){
-	// if (keys_buffer_hist){
-		// free(mods_buffer_hist);
-	// }
 	keys_buffer_pos = 0;
 	unic_buffer_pos = 0;
 	mods_buffer_pos = 0;
 
 	if (mode == normal){
-		// mods_buffer_hist = malloc(sizeof(uint8_t)*5);
 		mods_buffer_hist = report_buffer + KEYS_BUFFER_SIZE;
 		mods_buffer_size = 5;
 		update_keys_buffer_current = &update_keys_buffer_normal;
@@ -135,7 +131,6 @@ void set_mode(enum modes mode){
 
 	}
 	else {
-		// mods_buffer_hist = malloc(sizeof(uint8_t)*4);
 		mods_buffer_hist = report_buffer + UNIC_BUFFER_SIZE;
 		mods_buffer_size = 4;
 		update_keys_buffer_current = &update_keys_buffer_unicode;
@@ -206,7 +201,7 @@ int main(){
         // Some fucker wants to know what happened
         if(usbInterruptIsReady()){
             // Send over the HID data
-            usbSetInterrupt(report_buffer, sizeof(report_buffer)); // usb low speed, so up to 8 bytes
+            usbSetInterrupt(report_buffer, sizeof(report_buffer));
         }
     }
 
