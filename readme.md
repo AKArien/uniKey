@@ -13,7 +13,7 @@ If you want a « classic » keyboard with another microncontroller, check out 
 # Hardware
 
 There is currently one physical keyboard in the project, though i do plan on making more.
-The names used are the ones needed for compilation of the firmware with them. Check firmware section for more details.
+The names used below are the ones needed for compilation of the firmware with them. Check firmware section for more details.
 ALL_MAINBOARD :
 - Ortholinear, 266\*95mm
 - Split, 2\*2,5-wide bottom-row keys « spacebar », 2-tall rightmost key « enter/return »
@@ -35,6 +35,10 @@ Compilation of the firmware for the different models is scheduled to be handled 
 The ALL_MAINBOARD design uses the V-USB library, as it doesn’t have a dedicated USB chip.
 
 To upload, use ```make upload ISP=<your in-circuit serial programmer, as per avrdude>```
+Tip : UNOs can serve as in-cuircuit programmers ! Check out :
+- Wiring and explanations : https://docs.arduino.cc/built-in-examples/arduino-isp/ArduinoISP/
+- Arduino sketch : https://gist.github.com/srmq/0217a2844a9d82a6913ff989472a98dd
+- The name for avrdude is `arduino`
 
 # Thanks
 
