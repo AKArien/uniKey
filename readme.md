@@ -18,20 +18,18 @@ There is currently one physical keyboard in the project, though i do plan on mak
 The names used below are the ones needed for compilation of the firmware with them. Check firmware section for more details.
 
 ALL_MAINBOARD :
-- Ortholinear, 266\*95mm
-- Split, 2\*2,5-wide bottom-row keys « spacebar », 2-tall rightmost key « enter/return »
-- 5\*14,
+- Physical configuration :
+  - Ortholinear, 266\*95mm
+  - Split, 2\*2,5-wide bottom-row keys « spacebar », 2-tall rightmost key « enter/return »
+  - 5\*14,
 - Available schematics use :
   - An arduino pro mini (or knock-off)
   - 66 keys and as many diodes
   - Resistors and zener diodes for V-USB
 - Features (almost) all the keys needed to make a classic keyboard, including « pinky keys » and arrow keys.
-
-  Lacks function keys, though you could probably easily add them to the topmost typing row (the keys that usually have numbers) with a modifier.
-
-  Doesn’t have space for both an escape and another key left of the topmost typing row (though most users probably wouldn’t even notice)
-
-  Assuming standard placement of return/backslash and modifiers, there is not really space for a classicly positioned « delete next » key. You could rather easily modify the pcb to make the « enter » key 1\*1, freeing space for another key and placing your deleting keys as you wish. The default is to have « delete previous » in the split long key on the bottom row and « delete next » in the top right corner.
+  - Lacks function keys, though you could probably easily add them to the topmost typing row (the keys that usually have numbers) with a modifier.
+  - Doesn’t have space for both an escape and another key left of the topmost typing row (though most users probably wouldn’t even notice)
+  - Assuming standard placement of return/backslash and modifiers, there is not really space for a classicly positioned « delete next » key. You could rather easily modify the pcb to make the « enter » key 1\*1, freeing space for another key and placing your deleting keys as you wish. The default is to have « delete previous » in the split long key on the bottom row and « delete next » in the top right corner.
 
 # Firmware
 
