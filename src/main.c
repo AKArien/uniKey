@@ -12,14 +12,18 @@
 #include "keys/layouts.h"
 #include "pins.h"
 
-uint8_t report_buffer[8]; // usb low speed, so up to 8 bytes
+#ifdef ALL_MAINBOARD
+#define REPORT_BUFFER_SIZE 8 // usb low speed, so up to 8 bytes
+#define NORM_INDV_COUNT 3
+#define UNIC_INDV_COUNT 2
+#endif
 
-#define KEYS_BUFFER_SIZE 3
-uint8_t keys_buffer_hist[KEYS_BUFFER_SIZE];
-uint8_t keys_buffer_pos;
+uint8_t report_buffer[REPORT_BUFFER_SIZE];
 
-#define UNIC_BUFFER_SIZE 2
-uint16_t unic_buffer_hist[UNIC_BUFFER_SIZE];
+uint8_t norm_buffer_hist[NORM_INDV_COUNT];
+uint8_t norm_buffer_pos;
+
+uint16_t unic_buffer_hist[UNIC_INDV_COUNT];
 uint8_t unic_buffer_pos;
 
 uint8_t* mods_buffer_hist;
@@ -30,39 +34,34 @@ int idle_rate = 500;
 
 enum modes {
 	normal,
-	erglacon
+	unicode
 };
 
 void init(){
-	// vusb is on 3 and 4 of D, since it needs an interrupt (D3, aka int1)
-
 #ifdef MODEL_ALL_MAINBOARD
-
 	DDRB = 0x00;
 	DDRC = 0x02;
 	DDRD = 0xA6;
-
 #endif
-
 }
 
 void update_keys_buffer_normal(int code, int state){
-	for (int i = 0 ; i < KEYS_BUFFER_SIZE ; i++){ // is the code already being reported ?
-		if (keys_buffer_hist[i] == code){
+	for (int i = 0 ; i < NORM_INDV_COUNT ; i++){ // is the code already being reported ?
+		if (norm_buffer_hist[i] == code){
 			if (state){
 				return;
 			}
 			else{
-				keys_buffer_hist[i] = 0x00; // void the entry if needed
+				norm_buffer_hist[i] = 0x00; // void the entry if needed
 				goto NORMAL_WRITE;
 			}
 		}
 	}
-	keys_buffer_hist[keys_buffer_pos%KEYS_BUFFER_SIZE] = (uint8_t)code;
-	keys_buffer_pos = (keys_buffer_pos + 1) % KEYS_BUFFER_SIZE;
+	norm_buffer_hist[norm_buffer_pos%NORM_INDV_COUNT] = (uint8_t)code;
+	norm_buffer_pos = (norm_buffer_pos + 1) % NORM_INDV_COUNT;
 
 NORMAL_WRITE:
-	memcpy(report_buffer, keys_buffer_hist, KEYS_BUFFER_SIZE); // write the report
+	memcpy(report_buffer, norm_buffer_hist, NORM_INDV_COUNT); // write the report
 }
 
 void update_keys_buffer_unicode(int code, int state){
@@ -81,7 +80,7 @@ void update_keys_buffer_unicode(int code, int state){
 	unic_buffer_pos = (unic_buffer_pos + 1) % UNIC_BUFFER_SIZE;
 
 UNIC_WRITE:
-	memcpy(report_buffer, keys_buffer_hist, UNIC_BUFFER_SIZE); // write the report
+	memcpy(report_buffer, unic_buffer_hist, UNIC_BUFFER_SIZE); // write the report
 }
 
 void (*update_keys_buffer_current)(int, int);
@@ -119,20 +118,20 @@ void update_report_buffer(){
 }
 
 void set_mode(enum modes mode){
-	keys_buffer_pos = 0;
+	norm_buffer_pos = 0;
 	unic_buffer_pos = 0;
 	mods_buffer_pos = 0;
 
 	if (mode == normal){
-		mods_buffer_hist = report_buffer + KEYS_BUFFER_SIZE;
-		mods_buffer_size = 5;
+		mods_buffer_hist = report_buffer + NORM_INDV_COUNT;
+		mods_buffer_size = REPORT_BUFFER_SIZE - NORM_INDV_COUNT;
 		update_keys_buffer_current = &update_keys_buffer_normal;
 		current_get_key_at = &norm_get_key_at;
 
 	}
 	else {
 		mods_buffer_hist = report_buffer + UNIC_BUFFER_SIZE;
-		mods_buffer_size = 4;
+		mods_buffer_size = REPORT_BUFFER_SIZE - UNIC_INDV_COUNT * 2; // since a report is 2 bytes
 		update_keys_buffer_current = &update_keys_buffer_unicode;
 		current_get_key_at = &unic_get_key_at;
 	}
@@ -171,39 +170,38 @@ int main(){
 	set_mode(normal);
 
 	// Watchdog, just in case
-    wdt_enable(WDTO_1S);
+	wdt_enable(WDTO_1S);
 
-    usbInit();
-    // Re-enumerate device
-    usbDeviceDisconnect();
-    uchar i = 0;
-    while(--i){
-        wdt_reset();
-        _delay_ms(1);
-    }
-    usbDeviceConnect();
-    sei();
+	usbInit();
+	// Re-enumerate device
+	usbDeviceDisconnect();
+	uchar i = 0;
+	while(--i){
+		wdt_reset();
+		_delay_ms(1);
+	}
+	usbDeviceConnect();
+	sei();
 
-    for(;;){
-        wdt_reset();
+	for(;;){
+		wdt_reset();
 
-        usbPoll();
+		usbPoll();
 
-        // 0 is an indefinite idle
-        if(idle_rate != 0) {
-            for(int i = 0; i < idle_rate ; i++){
-                _delay_ms(4);
-            }
-        }
+		// 0 is an indefinite idle
+		if(idle_rate != 0) {
+			for(int i = 0; i < idle_rate ; i++){
+				_delay_ms(4);
+			}
+		}
 
-				update_report_buffer();
+		update_report_buffer();
 
-        // Some fucker wants to know what happened
-        if(usbInterruptIsReady()){
-            // Send over the HID data
-            usbSetInterrupt(report_buffer, sizeof(report_buffer));
-        }
-    }
+		// Some fucker wants to know what happened
+		if(usbInterruptIsReady()){
+			// Send over the HID data
+			usbSetInterrupt(report_buffer, sizeof(report_buffer));
+		}
 
-    return 0;
+	return 0;
 }
