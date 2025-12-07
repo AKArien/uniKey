@@ -40,8 +40,46 @@ const PROGMEM char normal_table[5][14] = {
     {LCTL, LMTA, LALT, SPCE, 0x00, 0x00, BKSP, SPCE, 0x00, RALT, RCTL, LARW, DARW, RARW}
 };
 
-const PROGMEM uint16_t erglacon_table[5][14] = {
-
+const PROGMEM uint16_t erglacon_table[6][5][14] = {
+    { // no mods
+        {Uescape, U1, U2, U3, U4, U5, U6, U7, U8, U9, U0, Ubksl, Ueq, Ubackspace},
+        {Utab, Uy, 0xFFFF, Uo, Uf, Uk, Uv, Up, Ul, Uc, Uq, Ulqt, Urqt, 0x0000},
+        {LSFT, Ui, Ua, Ue, Uu, Ucomma, Ug, Ut, Un, Us, Us, Ur, Unbrsp, , Ureturn},
+        {LALT, Upoint, Uhyphen, Uh, Uz, Ub, Ud, Um, Uw, Ux, , , },
+        {CAPS, LMTA, LCTL, Uspace, 0x0000, 0x0000, Ubackspace, Uspace, 0x0000, RALT, RCTL, , , }
+    },
+    { // shift
+        {Uescape, Ueuro, Uat, Usharp, Udollar, Upercent, Ucircum, Uand, Uaster, Ulqt, Urqt, Uunderscore, Uplus, Ubackspace},
+        {Utab, UY, 0xFFFF, UO, UF, UK, UV, UP, UL, UC, UQ, Ulqt, Urqt, 0x0000},
+        {LSFT, UI, UA, UE, UU, , UG, UT, UN, US, UR, Unbrsp, Ubksl, Ureturn},
+        {LALT, Ucolon, Uquestn, UH, UZ, UB, UD, UM, UW, UX, , , },
+        {CAPS, LMTA, LCTL, Uspace, 0x0000, 0x0000, Ubackspace, Uspace, 0x0000, RALT, RCTL, , , }
+    },
+    { // altgr
+        {Uescape, Usub0, Usub1, Usub2, Usub3, Usub4, Usub5, Usub6, Usub7, Usub8, Usub9, Usub0, 0x0000, 0x0000, Udelete},
+        {Utab, Ucircum, Uless, Umore, Udollar, Upercent, Uat, Uand, Uaster, UapostUS, Ugrave, 0x0000, 0x0000, 0x0000},
+        {LSFT, Uopcbr, Uopparen, Uclparen, Uclcbr, Ueq, Uatsl, Uplus, Uhyphen, Ubksl, UdbapostUS, 0x0000, 0x0000, Ureturn},
+        {LALT, Utilde, Uopsbr, Uclcbr, Uunderscore, Usharp, Upipe, Uexclam, Usemicolon, Ucolon, Uquestn, , ,},
+        {CAPS, LMTA, LCTL, Uspace, 0x0000, 0x0000, Udelete, Uspace, 0x0000, RALT, RCTL, , ,}
+    },
+    { // altgr + shift
+        {Uescape, Usup0, Usup1, Usup2, Usup3, Usup4, Usup5, Usup6, Usup7, Usup8, Usup9, Usup0, 0x0000, 0x0000, Udelete},
+        {Utab, }
+    },
+    { // iso level 5
+        {},
+        {},
+        {},
+        {},
+        {}
+    },
+    { // iso level 5 + shift
+        {},
+        {},
+        {},
+        {},
+        {}
+    }
 };
 
 #endif
