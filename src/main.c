@@ -138,29 +138,29 @@ void set_mode(enum modes mode){
 }
 
 usbMsgLen_t usbFunctionSetup(uint8_t data[8]){
-    usbRequest_t *rq = (void *) data;
+	usbRequest_t *rq = (void *) data;
 
-    if((rq->bmRequestType & USBRQ_TYPE_MASK) == USBRQ_TYPE_MASK){
-        switch(rq->bRequest){
+	if((rq->bmRequestType & USBRQ_TYPE_MASK) == USBRQ_TYPE_MASK){
+		switch(rq->bRequest){
 
-            case USBRQ_HID_GET_REPORT:
-                // Treat same as our interrupt IN (send keys)
-                usbMsgPtr = (unsigned short)report_buffer;
-                return sizeof(report_buffer);
+			case USBRQ_HID_GET_REPORT:
+				// Treat same as our interrupt IN (send keys)
+				usbMsgPtr = (unsigned short)report_buffer;
+				return sizeof(report_buffer);
 
-            // Send or change Idle rate when commanded
-            case USBRQ_HID_GET_IDLE:
-                usbMsgPtr = (unsigned short)&idle_rate;
-                return 1;
+			// Send or change Idle rate when commanded
+			case USBRQ_HID_GET_IDLE:
+				usbMsgPtr = (unsigned short)&idle_rate;
+				return 1;
 
-            case USBRQ_HID_SET_IDLE:
-                idle_rate = rq->wValue.bytes[1];
-                return 0;
-        }
-    }
+			case USBRQ_HID_SET_IDLE:
+				idle_rate = rq->wValue.bytes[1];
+				return 0;
+		}
+	}
 
-    // By default, return no data back
-    return 0;
+	// By default, return no data back
+	return 0;
 }
 
 int main(){
