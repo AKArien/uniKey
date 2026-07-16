@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "usbdrv/usbdrv.h"
+#include "v-usb/usbdrv/usbdrv.h"
 
 #include "descriptors.h"
 #include "keys/layouts.h"
@@ -61,7 +61,7 @@ void update_keys_buffer_normal(int code, int state){
 	norm_buffer_pos = (norm_buffer_pos + 1) % NORM_INDV_COUNT;
 
 NORMAL_WRITE:
-	memcpy(report_buffer, norm_buffer_hist, NORM_INDV_COUNT); // write the report
+	memcpy(report_buffer, norm_buffer_hist, NORM_INDV_COUNT);
 }
 
 void update_keys_buffer_unicode(int code, int state){
@@ -80,7 +80,7 @@ void update_keys_buffer_unicode(int code, int state){
 	unic_buffer_pos = (unic_buffer_pos + 1) % UNIC_BUFFER_SIZE;
 
 UNIC_WRITE:
-	memcpy(report_buffer, unic_buffer_hist, UNIC_BUFFER_SIZE); // write the report
+	memcpy(report_buffer, unic_buffer_hist, UNIC_BUFFER_SIZE);
 }
 
 void (*update_keys_buffer_current)(int, int);
@@ -159,7 +159,6 @@ usbMsgLen_t usbFunctionSetup(uint8_t data[8]){
 		}
 	}
 
-	// By default, return no data back
 	return 0;
 }
 
