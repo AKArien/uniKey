@@ -1,4 +1,4 @@
-#include "codes.h"
+#include "hid-kb-keys.h"
 #include "unicode.h"
 
 #ifdef TINIEST
