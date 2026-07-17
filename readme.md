@@ -12,7 +12,7 @@ If you want to tweak and re-use the usb reports, check out src/descriptors.h.
 
 If you want a « classic » keyboard with one of the microcontrollers / physical builds (see below), you can change the code to force the mode and re-use it from there.
 
-If you want a « classic » keyboard with another microncontroller / physical build, check out project [Golem](https://golem.hu/) and [QMK][https://github.com/qmk/qmk_firmware].
+If you want a « classic » keyboard with another microncontroller / physical build, check out project [Golem](https://golem.hu/) and [QMK](https://github.com/qmk/qmk_firmware).
 
 # Hardware
 
