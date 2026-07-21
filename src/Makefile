@@ -1,5 +1,6 @@
 ODIR=obj
 CC=avr-gcc
+MODEL=ALL_MAINBOARD
 CFLAGS=-Wall -DF_CPU=16000000 -mmcu=atmega328p -I. -Iusbdrv -O3 -D $(MODEL)
 
 OBJS=main.o reportbuf.o v-usb/usbdrv/usbdrv.o v-usb/usbdrv/usbdrvasm.o v-usb/usbdrv/oddebug.o
