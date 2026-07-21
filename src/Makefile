@@ -2,7 +2,7 @@ ODIR=obj
 CC=avr-gcc
 CFLAGS=-Wall -DF_CPU=16000000 -mmcu=atmega328p -I. -Iusbdrv -O3 -D $(MODEL)
 
-OBJS=main.o v-usb/usbdrv/usbdrv.o v-usb/usbdrv/usbdrvasm.o v-usb/usbdrv/oddebug.o
+OBJS=main.o reportbuf.o v-usb/usbdrv/usbdrv.o v-usb/usbdrv/usbdrvasm.o v-usb/usbdrv/oddebug.o
 
 %.o: %.c %.h
 	$(CC) -c -o $@ $< $(CFLAGS)
